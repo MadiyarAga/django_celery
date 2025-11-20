@@ -55,8 +55,7 @@ ROOT_URLCONF = 'send_email.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,12 +124,16 @@ EMAIL_HOST_USER = 'djangocelery@gmail.com'
 EMAIL_HOST_PASSWORD = 'DjangoCelery'
 EMAIL_PORT = 587
 
+
 # REDIS related settings
-REDIS_HOST = 'localhost'
-REDIS_PORT = '6379'
-CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
-CELERY_BROKER_TRANSPORT_OPTION = {'visibility_timeout': 3600}
-CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
+# REDIS_HOST = 'localhost'
+# REDIS_PORT = '6379'
+# CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+# CELERY_BROKER_TRANSPORT_OPTION = {'visibility_timeout': 3600}
+# CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

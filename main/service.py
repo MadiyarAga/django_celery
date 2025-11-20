@@ -1,11 +1,16 @@
-from django.core.mail import send_mail
+import json
+from django.core.files import File
+import datetime
 
 
 def send(user_email):
-    send_mail(
-        'Вы подписались на рассылку',
-        'Мы будем присылать Вам много спама.',
-        'djangocelery@gmail.com',
-        [user_email],
-        fail_silently=False,
-    )
+    f = open(f'./emails.txt', 'a')
+    testfile = File(f)
+    testfile.write(str(datetime.datetime.now()) + "  " + user_email + '\n')
+    testfile.close()
+    f.close()
+
+
+# def save_categories(data):
+#     with open(f'./categories.json', 'a') as file:
+#         json.dump(data, file)

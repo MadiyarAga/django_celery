@@ -1,41 +1,35 @@
+import requests
 from celery import shared_task
-from django.core.mail import send_mail
-from send_email.celery import app
 
-from .models import Contact
-from .service import send
-
-
-@app.task
-def send_spam_email(user_email):
-    send(user_email)
+from .utils import send_email_task, log_email
+# from send_email.celery import app
+# from main.service import send
 
 
-@app.task
-def send_beat_emial():
-    for contact in Contact.objects.all():
-        send_mail(
-            'Вы подписались на рассылку',
-            'Мы будем присылать Вам много спама каждые 5 минут.',
-            'djangocelery@gmail.com',
-            [contact.email],
-            fail_silently=False,
-        )
+@shared_task
+def send_spam_email(recipient, subject, message):
+    print(f"Email отправлен: {recipient}, Тема: {subject}, Сообщение: {message}")
+
+    send_email_task(recipient, subject, message)
+    log_email(recipient, subject, message)
 
 
 # @app.task
-# def my_task(a, b):
-#     return a + b
+# def write_file(email):
+#     send(email)
+#     return True
 #
 #
-# @app.task(bind=True, default_retry_delay=5 * 60)
-# def my_task_retry(self, x, y):
-#     try:
-#         return x + y
-#     except Exception as exc:
-#         raise self.retry(exc=exc, countdown=60)
+# @app.task
+# def get_api():
+#     response = requests.get('https://api.publicapis.org/categories')
+#     if response.status_code == 200:
+#         save_categories(response.json())
+#         return True
+#     return False
 #
 #
-# @shared_task
-# def my_shared_task(msg):
-#     return msg + '!!!'
+# @app.task
+# def test_task():
+#     print('Its Worked')
+#     return True

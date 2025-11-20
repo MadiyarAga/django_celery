@@ -1,0 +1,4 @@
+To: test@example.com 
+Subject: Тест. no-reply 
+Message: Это сообщение является тестовым!
+

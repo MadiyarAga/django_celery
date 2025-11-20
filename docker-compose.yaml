@@ -1,0 +1,38 @@
+services:
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  django:
+    restart: always
+    build: ./
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+
+  celery:
+    restart: always
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - django
+      - redis
+    command: celery -A send_email worker -l info --pool=solo
+
+  flower:
+    restart: always
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - django
+      - celery
+    command: celery -A send_email flower
